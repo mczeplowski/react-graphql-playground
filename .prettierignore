@@ -7,3 +7,4 @@ next-env.d.ts
 next.config.ts
 cypress.config.ts
 jest.config.ts
+src/generated/

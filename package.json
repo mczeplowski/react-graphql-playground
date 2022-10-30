@@ -11,14 +11,23 @@
     "lint-staged": "lint-staged",
     "test": "jest --watch",
     "cypress": "cypress open",
-    "cypress:headless": "cypress run"
+    "cypress:headless": "cypress run",
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
+    "@apollo/client": "^3.7.1",
+    "antd": "^4.23.6",
+    "graphql": "^16.6.0",
     "next": "13.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.13.8",
+    "@graphql-codegen/client-preset": "1.1.1",
+    "@graphql-codegen/typescript": "2.8.0",
+    "@graphql-codegen/typescript-operations": "2.5.5",
+    "@graphql-codegen/typescript-react-apollo": "3.3.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@types/node": "18.11.7",

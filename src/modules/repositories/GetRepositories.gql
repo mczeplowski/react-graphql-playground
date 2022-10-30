@@ -1,0 +1,33 @@
+query GetRepositories(
+  $query: String = "stars:>100000"
+  $after: String
+  $before: String
+  $first: Int = 10
+) {
+  search(
+    type: REPOSITORY
+    query: $query
+    after: $after
+    before: $before
+    first: $first
+  ) {
+    repositoryCount
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      endCursor
+      startCursor
+    }
+    edges {
+      node {
+        ... on Repository {
+          forkCount
+          id
+          name
+          stargazerCount
+          url
+        }
+      }
+    }
+  }
+}
