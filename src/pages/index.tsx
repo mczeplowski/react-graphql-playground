@@ -4,10 +4,25 @@ import {
   Repository,
   useGetRepositoriesQuery
 } from '../generated/graphql-types';
+import { RepositoriesSearchInput } from '../modules/repositories/components/SearchInput';
+import { RepositoriesTable } from '../modules/repositories/components/Table';
+import { useSearchRepositoryQueryParams } from '../modules/repositories/hooks/useSearchRepositoryQueryParams';
 
-export default function Home() {
-  const { loading, error, data } = useGetRepositoriesQuery();
-  console.log({ error, data });
+const DEFAULT_QUERY_VALUE = 'stars:>100000';
+const DEFAULT_PAGE_SIZE = 10;
+
+const Home = () => {
+  const { queryPrams, pushParams } = useSearchRepositoryQueryParams();
+  const { loading, error, data } = useGetRepositoriesQuery({
+    variables: {
+      query: queryPrams.query || DEFAULT_QUERY_VALUE,
+      first: Number(queryPrams.first) || DEFAULT_PAGE_SIZE
+    }
+  });
+
+  const handleOnSearch = (query: string) => {
+    pushParams({ query });
+  };
 
   const nodes = data?.search?.edges
     ?.map(edge => edge?.node)
@@ -21,11 +36,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <ul>
-        {nodes?.map(node => (
-          <li key={node.id}>{node.name}</li>
-        ))}
-      </ul>
+      <RepositoriesSearchInput onSearch={handleOnSearch} />
+      <RepositoriesTable dataSource={nodes} loading={loading} />
     </>
   );
-}
+};
+
+export default Home;
