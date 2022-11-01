@@ -1,3 +1,4 @@
+import { Alert } from 'antd';
 import Head from 'next/head';
 
 import {
@@ -10,23 +11,30 @@ import { useSearchRepositoryQueryParams } from '../modules/repositories/hooks/us
 
 const DEFAULT_QUERY_VALUE = 'stars:>100000';
 const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_AFTER = '0';
 
 const Home = () => {
-  const { queryPrams, pushParams } = useSearchRepositoryQueryParams();
+  const { queryParams, pushParams } = useSearchRepositoryQueryParams();
+  const queryText = queryParams.query || DEFAULT_QUERY_VALUE;
+  const pageSize = Number(queryParams.first) || DEFAULT_PAGE_SIZE;
+
   const { loading, error, data } = useGetRepositoriesQuery({
     variables: {
-      query: queryPrams.query || DEFAULT_QUERY_VALUE,
-      first: Number(queryPrams.first) || DEFAULT_PAGE_SIZE
+      query: queryText,
+      first: pageSize,
+      after: Buffer.from(
+        `cursor:${queryParams.after || DEFAULT_AFTER}`
+      ).toString('base64')
     }
   });
 
   const handleOnSearch = (query: string) => {
-    pushParams({ query });
+    pushParams({ query, after: DEFAULT_AFTER });
   };
 
-  const nodes = data?.search?.edges
-    ?.map(edge => edge?.node)
-    .filter(node => node?.__typename === 'Repository') as Partial<Repository>[];
+  const nodes = data?.search?.edges?.map(
+    edge => edge?.node
+  ) as Partial<Repository>[];
 
   return (
     <>
@@ -37,7 +45,33 @@ const Home = () => {
       </Head>
 
       <RepositoriesSearchInput onSearch={handleOnSearch} />
-      <RepositoriesTable dataSource={nodes} loading={loading} />
+      {error ? (
+        <Alert message={error.name} description={error.message} type="error" />
+      ) : (
+        <RepositoriesTable
+          dataSource={nodes}
+          loading={loading}
+          pagination={{
+            pageSize,
+            total: data?.search.repositoryCount,
+            current: queryParams.after
+              ? Number(queryParams.after) / pageSize + 1
+              : undefined
+          }}
+          onChange={({ current, pageSize }) => {
+            const after =
+              current && pageSize
+                ? `${(current - 1) * pageSize}`
+                : DEFAULT_AFTER;
+
+            pushParams({
+              query: queryText,
+              after,
+              first: pageSize
+            });
+          }}
+        />
+      )}
     </>
   );
 };

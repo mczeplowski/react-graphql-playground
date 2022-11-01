@@ -5,7 +5,7 @@ import { GetRepositoriesQueryVariables } from '../../../generated/graphql-types'
 export const useSearchRepositoryQueryParams = () => {
   const router = useRouter();
 
-  const queryPrams = router.query as GetRepositoriesQueryVariables;
+  const queryParams = router.query as GetRepositoriesQueryVariables;
 
   const pushParams = (query: GetRepositoriesQueryVariables) => {
     router.push({
@@ -13,5 +13,5 @@ export const useSearchRepositoryQueryParams = () => {
     });
   };
 
-  return { queryPrams, pushParams };
+  return { queryParams, pushParams };
 };

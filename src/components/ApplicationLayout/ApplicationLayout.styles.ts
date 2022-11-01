@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
 
 export const PageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   min-height: calc(100vh - 206px); /* 70px footer & 64px header & 72px margin */
   width: 100%;
   max-width: 768px;
