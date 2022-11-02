@@ -1,11 +1,11 @@
 import { MockedProvider } from '@apollo/client/testing';
 import { render, screen, fireEvent } from '@testing-library/react';
 
-import Home from '../index';
+import Home from '../pages/index';
 import {
   MOCK_GET_REPOSITORIES_SUCCESS,
   MOCK_GET_REPOSITORIES_SUCCESS_ITEMS
-} from '../../modules/repositories/graphql/MockGetRepositoriesSuccess';
+} from '../modules/repositories/graphql/MockGetRepositoriesSuccess';
 
 const [firstRowData] = MOCK_GET_REPOSITORIES_SUCCESS_ITEMS;
 const mocks = [MOCK_GET_REPOSITORIES_SUCCESS];

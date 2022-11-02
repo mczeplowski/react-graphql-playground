@@ -10,6 +10,7 @@
     "prepare": "husky install",
     "lint-staged": "lint-staged",
     "test": "jest --watch",
+    "e2e": "start-server-and-test dev http://localhost:3000 cypress",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
     "codegen": "graphql-codegen --config codegen.ts"
@@ -45,6 +46,7 @@
     "jest-environment-jsdom": "^29.2.2",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
+    "start-server-and-test": "^1.14.0",
     "typescript": "4.8.4"
   }
 }
