@@ -17,6 +17,9 @@ const Home = () => {
   const { queryParams, pushParams } = useSearchRepositoryQueryParams();
   const queryText = queryParams.query || DEFAULT_QUERY_VALUE;
   const pageSize = Number(queryParams.first) || DEFAULT_PAGE_SIZE;
+  const currentPage = queryParams.after
+    ? Number(queryParams.after) / pageSize + 1
+    : undefined;
 
   const { loading, error, data } = useGetRepositoriesQuery({
     variables: {
@@ -44,7 +47,10 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <RepositoriesSearchInput onSearch={handleOnSearch} />
+      <RepositoriesSearchInput
+        onSearch={handleOnSearch}
+        defaultValue={queryParams.query ? `${queryParams.query}` : ''}
+      />
       {error ? (
         <Alert message={error.name} description={error.message} type="error" />
       ) : (
@@ -54,9 +60,7 @@ const Home = () => {
           pagination={{
             pageSize,
             total: data?.search.repositoryCount,
-            current: queryParams.after
-              ? Number(queryParams.after) / pageSize + 1
-              : undefined
+            current: currentPage
           }}
           onChange={({ current, pageSize }) => {
             const after =
