@@ -29,18 +29,28 @@ jest.mock('next/router', () => ({
 }));
 
 describe('HomePage', () => {
-  it('renders correct', async () => {
+  it('renders correct number of rows', async () => {
     renderHomePageWithProviders();
 
     const firstRowName = await screen.findByText(firstRowData.name);
-    const firstRow = firstRowName.closest('tr');
     const tableBody = firstRowName.closest('tbody');
 
-    expect(firstRowName).toHaveAttribute('href', firstRowData.url);
-    expect(firstRow).toHaveTextContent(firstRowData.forkCount);
-    expect(firstRow).toHaveTextContent(firstRowData.stargazerCount);
     expect(tableBody.childElementCount).toEqual(10);
   });
+
+  test.each(MOCK_GET_REPOSITORIES_SUCCESS_ITEMS)(
+    "renders correctly $name's row data",
+    async ({ name, url, stargazerCount, forkCount }) => {
+      renderHomePageWithProviders();
+
+      const nameElement = await screen.findByText(name);
+      const rowElement = nameElement.closest('tr');
+
+      expect(nameElement).toHaveAttribute('href', url);
+      expect(rowElement).toHaveTextContent(forkCount);
+      expect(rowElement).toHaveTextContent(stargazerCount);
+    }
+  );
 
   it('calls router.push after entering different query', async () => {
     renderHomePageWithProviders();
