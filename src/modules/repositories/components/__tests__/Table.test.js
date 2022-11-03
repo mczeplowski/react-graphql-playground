@@ -18,7 +18,7 @@ describe('RepositoriesTable', () => {
   it('renders correct empty state', () => {
     render(<RepositoriesTable />);
 
-    const label = screen.getByText('No Data');
+    const label = screen.getByText(/no data/i);
 
     expect(label).toBeInTheDocument();
   });
