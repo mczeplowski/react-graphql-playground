@@ -7,6 +7,7 @@ import {
 } from '../generated/graphql-types';
 import { RepositoriesSearchInput } from '../modules/repositories/components/SearchInput';
 import { RepositoriesTable } from '../modules/repositories/components/Table';
+import { normalizeRepositoryResponseData } from '../modules/repositories/helpers/normalizeRepositoryResponseData';
 import { useSearchRepositoryQueryParams } from '../modules/repositories/hooks/useSearchRepositoryQueryParams';
 
 const DEFAULT_QUERY_VALUE = 'stars:>100000';
@@ -35,9 +36,7 @@ const Home = () => {
     pushParams({ query, after: DEFAULT_AFTER });
   };
 
-  const nodes = data?.search?.edges?.map(
-    edge => edge?.node
-  ) as Partial<Repository>[];
+  const nodes = normalizeRepositoryResponseData(data);
 
   return (
     <>
